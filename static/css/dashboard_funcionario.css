@@ -1,0 +1,19 @@
+/* static/css/dashboard_funcionario.css */
+
+/* * =================================
+ * SEÇÃO DE INFORMAÇÕES DO FUNCIONÁRIO
+ * =================================
+ */
+.funcionario-info {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #fafafa;
+  border-top: 2px solid var(--cor-secundaria);
+  border-radius: 0 0 var(--borda-raio) var(--borda-raio);
+}
+
+.funcionario-info h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}

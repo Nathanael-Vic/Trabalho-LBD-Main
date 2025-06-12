@@ -1,0 +1,48 @@
+/* static/css/dashboard_cliente.css */
+.saldo {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--cor-sucesso);
+  margin: 0;
+}
+
+.movimentacoes {
+    list-style: none;
+    padding-left: 0;
+}
+
+.movimentacoes li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.movimentacoes li:last-child {
+    border-bottom: none;
+}
+
+.movimentacoes li span {
+    font-weight: bold;
+}
+
+.movimentacoes li.entrada span {
+    color: var(--cor-sucesso);
+}
+
+.movimentacoes li.entrada::before {
+    content: '▲';
+    color: var(--cor-sucesso);
+    margin-right: 10px;
+}
+
+.movimentacoes li.saida span {
+    color: var(--cor-perigo);
+}
+
+.movimentacoes li.saida::before {
+    content: '▼';
+    color: var(--cor-perigo);
+    margin-right: 10px;
+}

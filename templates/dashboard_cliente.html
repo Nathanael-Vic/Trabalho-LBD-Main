@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banco Malvader - Área do Cliente</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_cliente.css') }}" />
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/darth.png') }}" />
+</head>
+
+<body>
+
+  {% include 'components/header.html' %}
+
+  <main class="container-home">
+
+    {% include 'components/menu_lateral_cliente.html' %}
+
+    <section class="conteudo-principal">
+      <h1>Bem-vindo, {{ nome_usuario }}!</h1>
+      <p>Aqui está o resumo da sua conta.</p>
+
+      <div class="card">
+        <h2>Seu Saldo Atual</h2>
+
+        <p class="saldo">
+          {{ "R$ {:,.2f}".format(score_credito | float).replace(',', 'X').replace('.', ',').replace('X', '.') }}
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Ações Rápidas</h2>
+        <div class="atalhos">
+          <a href="#" class="btn-atalho">Fazer Transferência</a>
+          <a href="#" class="btn-atalho">Gerar Boleto de Depósito</a>
+          <a href="#" class="btn-atalho">Ver Extrato Completo</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Últimas Movimentações</h2>
+        <ul class="movimentacoes">
+          <li class="entrada">Pix recebido de 'L. Skywalker'<span>+ R$ 1.000,00</span></li>
+          <li class="saida">Compra no cartão - 'Cantina Mos Eisley'<span>- R$ 350,00</span></li>
+          <li class="entrada">Depósito em caixa<span>+ R$ 500,00</span></li>
+          <li class="saida">Pagamento de boleto - 'Conta de Luz Estrela da Morte'<span>- R$ 450,75</span></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

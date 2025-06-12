@@ -1,9 +1,11 @@
 /* static/css/dashboard_cliente.css */
+
+/* Estilos do Dashboard e Movimentações */
 .saldo {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--cor-sucesso);
-  margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--cor-sucesso);
+    margin: 0;
 }
 
 .movimentacoes {
@@ -45,4 +47,60 @@
     content: '▼';
     color: var(--cor-perigo);
     margin-right: 10px;
+}
+
+/* Estilos dos Formulários (Saque e Depósito) */
+form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-weight: 500;
+}
+
+.input-form {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1.2rem;
+    box-sizing: border-box; /* Garante que padding não afete a largura total */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-form:focus {
+    outline: none;
+    border-color: var(--cor-primaria); /* Vermelho Malvader */
+    box-shadow: 0 0 8px rgba(255, 44, 44, 0.5);
+}
+
+.btn-principal {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--cor-primaria); /* Vermelho Malvader */
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-principal:hover {
+    background-color: #ff4d4d; /* Um vermelho um pouco mais claro */
+    transform: translateY(-2px);
+}
+
+
+/* --- CÓDIGO PARA REMOVER AS SETAS DO CAMPO DE NÚMERO --- */
+
+/* Esconde as setas em navegadores baseados em WebKit (Chrome, Safari, Edge, Opera) */
+.input-form::-webkit-outer-spin-button,
+.input-form::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

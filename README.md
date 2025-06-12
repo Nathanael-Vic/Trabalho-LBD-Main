@@ -24,17 +24,8 @@ Criar uma aplicação bancária com interface gráfica e persistência em banco 
 | `models.py` | Modelos de dados (tabelas) usando SQLAlchemy. |
 | `requirements.txt` | Lista de todas as dependências Python para instalação. |
 | **`templates/`** | **Pasta com todos os arquivos HTML (vistas).** |
-| `templates/index.html` | Página inicial e de login. |
-| `templates/verify_otp.html` | Página para verificação do código OTP. |
-| `templates/dashboard_cliente.html` | Painel principal do cliente. |
-| `templates/deposito.html`| Página para o cliente realizar depósitos. |
-| `templates/saque.html`| Página para o cliente realizar saques. |
 | **`templates/components/`** | **Componentes reutilizáveis incluídos nas páginas.**|
-| `templates/components/header.html`| Cabeçalho padrão da área logada. |
-| `templates/components/menu_lateral_cliente.html` | Menu de navegação lateral para o cliente. |
-| **`static/`**| **Pasta com arquivos estáticos.** |
-| `static/css/`| Pasta com os arquivos de estilo CSS. |
-| `static/img/`| Pasta com as imagens utilizadas no projeto. |
+| **`static/`**| **Pasta com arquivos estáticos (CSS, JS, imagens).** |
 
 ---
 

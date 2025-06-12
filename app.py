@@ -176,18 +176,33 @@ def create_app():
                                cargo=funcionario.cargo)
 
     # ================== ROTAS DE DEPÓSITO E SAQUE (MOVIDAS PARA O LUGAR CORRETO) ==================
-    @app.route('/deposito')
+    @app.route('/deposito', methods=['GET', 'POST'])
     @login_required(role='Cliente')
     def deposito():
-        usuario = Usuario.query.get(session['user_id'])
-        return render_template('deposito.html', nome_usuario=usuario.nome)
+        # Lógica corrigida para buscar o saldo e enviar para o template
+        cliente = Cliente.query.filter_by(id_usuario=session['user_id']).first_or_404()
+        saldo_atual = cliente.contas[0].saldo if cliente.contas else 0.0
+        
+        # Ação do formulário (implementaremos depois)
+        if request.method == 'POST':
+            # Aqui virá a lógica para gerar o boleto
+            pass
 
-    @app.route('/saque')
+        return render_template('deposito.html', 
+                               nome_usuario=cliente.usuario.nome, 
+                               saldo=saldo_atual)
+
+    @app.route('/saque', methods=['GET', 'POST'])
     @login_required(role='Cliente')
     def saque():
         cliente = Cliente.query.filter_by(id_usuario=session['user_id']).first_or_404()
         saldo_atual = cliente.contas[0].saldo if cliente.contas else 0.0
         
+        # Ação do formulário (implementaremos depois)
+        if request.method == 'POST':
+            # Aqui virá a lógica para efetuar o saque
+            pass
+            
         return render_template('saque.html', 
                                nome_usuario=cliente.usuario.nome, 
                                saldo=saldo_atual)

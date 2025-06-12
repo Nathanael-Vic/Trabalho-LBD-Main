@@ -108,4 +108,4 @@ A aplicação estará disponível no seu navegador no endereço http://127.0.0.1
 
 - Isabela Martins Bandeira
 - Natália Ematné Kruchak
-- Nathanael Magno
+- Nathanael Victor Paiva Magno

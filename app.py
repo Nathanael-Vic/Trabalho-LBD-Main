@@ -1,4 +1,4 @@
-# app.py (VERSÃO FINAL COM CORREÇÃO DE COMPATIBILIDADE)
+# app.py (VERSÃO CORRIGIDA E ORGANIZADA)
 
 # ================== IMPORTAÇÕES ==================
 # Flask e extensões
@@ -28,9 +28,6 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def enviar_email_otp(destinatario, nome_usuario, otp):
-    """
-    Autentica com a API do Gmail e envia um e-mail com o código OTP.
-    """
     creds = None
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
@@ -66,6 +63,7 @@ def create_app():
     migrate = Migrate(app, db)
 
     # ================== DECORADOR DE AUTENTICAÇÃO ==================
+    # Definido aqui dentro, então só pode ser usado por rotas aqui dentro.
     def login_required(role=None):
         def decorator(f):
             @wraps(f)
@@ -81,6 +79,8 @@ def create_app():
         return decorator
 
     # ================== ROTAS ==================
+    # Todas as rotas do app devem ser definidas aqui dentro.
+    
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -125,19 +125,11 @@ def create_app():
         if request.method == 'POST':
             submitted_otp = request.form.get('otp')
             
-            # ===== ALTERAÇÃO À PROVA DE FALHAS =====
-            # Pega a data de expiração do banco
             expiracao = usuario.otp_expiracao
-
-            # Se a data do banco for "naive" (sem fuso), esta checagem adiciona o fuso UTC.
-            # Se a data já for "aware" (com fuso), esta linha não altera nada.
-            # Isso garante compatibilidade com dados antigos e novos.
             if expiracao and expiracao.tzinfo is None:
                 expiracao = expiracao.replace(tzinfo=timezone.utc)
-            # =========================================
 
             if usuario.otp_ativo == submitted_otp and expiracao and datetime.now(timezone.utc) < expiracao:
-                # Sucesso!
                 usuario.otp_ativo = None
                 usuario.otp_expiracao = None
                 db.session.commit()
@@ -152,7 +144,6 @@ def create_app():
                 else:
                     return redirect(url_for('dashboard_funcionario'))
             else:
-                # Falha
                 flash('Código OTP inválido ou expirado. Por favor, faça o login novamente para gerar um novo código.', 'danger')
                 session.pop('id_usuario_para_verificar', None)
                 return redirect(url_for('index'))
@@ -184,6 +175,24 @@ def create_app():
                                nome_usuario=funcionario.usuario.nome,
                                cargo=funcionario.cargo)
 
+    # ================== ROTAS DE DEPÓSITO E SAQUE (MOVIDAS PARA O LUGAR CORRETO) ==================
+    @app.route('/deposito')
+    @login_required(role='Cliente')
+    def deposito():
+        usuario = Usuario.query.get(session['user_id'])
+        return render_template('deposito.html', nome_usuario=usuario.nome)
+
+    @app.route('/saque')
+    @login_required(role='Cliente')
+    def saque():
+        cliente = Cliente.query.filter_by(id_usuario=session['user_id']).first_or_404()
+        saldo_atual = cliente.contas[0].saldo if cliente.contas else 0.0
+        
+        return render_template('saque.html', 
+                               nome_usuario=cliente.usuario.nome, 
+                               saldo=saldo_atual)
+
+    # A função create_app deve retornar a instância do app no final
     return app
 
 # ================== EXECUÇÃO ==================

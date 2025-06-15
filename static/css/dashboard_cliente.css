@@ -1,18 +1,19 @@
-/* static/css/dashboard_cliente.css */
-
-/* Estilos do Dashboard e Movimentações */
 .movimentacoes {
     list-style: none;
     padding-left: 0;
-    margin: 0; /* Adicionado para remover margem padrão da lista */
+    margin: 0;
 }
 
 .movimentacoes li {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 15px 10px;
     border-bottom: 1px solid #f0f0f0;
+}
+
+.descricao-transacao {
+    flex-grow: 1; 
+    padding: 0 15px; 
 }
 
 .movimentacoes li:last-child {
@@ -41,4 +42,29 @@
     content: '▼';
     color: var(--cor-perigo);
     margin-right: 10px;
+}
+
+.detalhe-conta {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.detalhe-conta span {
+    color: #555;
+}
+
+.detalhe-conta strong {
+    font-weight: bold;
+}
+
+.limite-valor {
+    color: var(--cor-perigo);
+}
+
+.rendimento-valor {
+    color: var(--cor-sucesso);
 }

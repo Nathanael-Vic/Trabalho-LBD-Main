@@ -1,11 +1,8 @@
-# config.py
-
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    # Secret key para sessões do Flask
     SECRET_KEY = os.getenv("SECRET_KEY", "sua_chave_secreta_aqui")
 
     # URI de conexão com o MySQL (altere 'seu_usuario', 'sua_senha' e 'banco_db' para os seus valores)

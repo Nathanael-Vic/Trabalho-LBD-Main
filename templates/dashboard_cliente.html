@@ -8,25 +8,18 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_cliente.css') }}" />
-    <!-- 1. ADICIONADO: Link para o CSS que contém o estilo de saldo correto -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/transferencia.css') }}" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/darth.png') }}" />
 </head>
 
 <body>
-
     {% include 'components/header.html' %}
-
     <main class="container-home">
-
         {% include 'components/menu_lateral_cliente.html' %}
-
         <section class="conteudo-principal">
-            <!-- Mensagens Flash -->
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <!-- Adicionando uma classe genérica de alerta para estilização -->
                         <div class="alert alert-{{ category }}">{{ message }}</div>
                     {% endfor %}
                 {% endif %}
@@ -37,11 +30,24 @@
 
             <div class="card">
                 <h2>Seu Saldo Atual</h2>
-
-                <!-- 2. CORRIGIDO: A estrutura do saldo agora é idêntica à das outras páginas -->
                 <div class="saldo-disponivel">
                     {{ "R$ {:,.2f}".format(saldo | float).replace(',', 'X').replace('.', ',').replace('X', '.') }}
                 </div>
+                {% if tipo_conta == 'Corrente' and detalhes_conta %}
+                <div class="detalhe-conta">
+                    <span>Limite Cheque Especial:</span>
+                    <strong class="limite-valor">
+                        R$ {{ "%.2f"|format(detalhes_conta.limite_cheque_especial) }}
+                    </strong>
+                </div>
+                {% elif tipo_conta == 'Poupanca' and detalhes_conta %}
+                <div class="detalhe-conta">
+                    <span>Rendimento Anual:</span>
+                    <strong class="rendimento-valor">
+                        {{ "%.2f"|format(detalhes_conta.taxa_rendimento * 100) }}%
+                    </strong>
+                </div>
+                {% endif %}
             </div>
 
             <div class="card">
@@ -56,8 +62,33 @@
             <div class="card">
                 <h2>Últimas Movimentações</h2>
                 <ul class="movimentacoes">
-                    <li class="entrada">Pix recebido de 'L. Skywalker'<span>+ R$ 1.000,00</span></li>
-                    <li class="saida">Compra no cartão - 'Cantina Mos Eisley'<span>- R$ 350,00</span></li>
+                    {% for t in transacoes %}
+                        {% if t.id_conta_origem == conta_id %}
+                            <li class="saida">
+                                <span class="descricao-transacao">
+                                    {% if t.tipo_transacao == 'Transferencia' %}
+                                        Transferência para {{ t.conta_destino.cliente.usuario.nome }}
+                                    {% else %}
+                                        {{ t.descricao }}
+                                    {% endif %}
+                                </span>
+                                <span>- R$ {{ "%.2f"|format(t.valor) }}</span>
+                            </li>
+                        {% else %}
+                            <li class="entrada">
+                                <span class="descricao-transacao">
+                                    {% if t.tipo_transacao == 'Transferencia' %}
+                                        Transferência de {{ t.conta_origem.cliente.usuario.nome }}
+                                    {% else %}
+                                        {{ t.descricao }}
+                                    {% endif %}
+                                </span>
+                                <span>+ R$ {{ "%.2f"|format(t.valor) }}</span>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li style="justify-content: center;">Nenhuma movimentação recente.</li>
+                    {% endfor %}
                 </ul>
             </div>
         </section>

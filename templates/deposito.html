@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Depósito - Banco Malvader</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_cliente.css') }}" />
-    <!-- Reutilizando o CSS da transferência para os formulários -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/transferencia.css') }}" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/darth.png') }}" />
 </head>
-
 <body>
     {% include 'components/header.html' %}
     <main class="container-home">
         {% include 'components/menu_lateral_cliente.html' %}
         <section class="conteudo-principal">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
             <h1>Realizar Depósito</h1>
             <p>Adicione fundos à sua conta.</p>
 
@@ -28,7 +32,6 @@
                     {{ "R$ {:,.2f}".format(saldo | float).replace(',', 'X').replace('.', ',').replace('X', '.') }}
                 </div>
                 <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-
                 <form class="form-transferencia" method="POST" action="{{ url_for('main.deposito') }}">
                     <div class="form-group">
                         <label for="valor">Valor a Depositar (R$)</label>

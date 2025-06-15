@@ -1,5 +1,3 @@
-/* static/css/transferencia.css */
-
 .form-transferencia {
     display: flex;
     flex-direction: column;
@@ -43,21 +41,16 @@
     color: var(--cor-texto);
 }
 
-/* === CORREÇÃO APLICADA AQUI === */
-
-/* Estilo de alinhamento para TODOS os botões dentro do formulário */
 .form-transferencia .btn {
-    align-self: flex-start; /* A propriedade que estava faltando! */
+    align-self: flex-start; 
     margin-top: 10px;
 }
 
-/* Classe específica para botões de sucesso (verde) */
 .btn-transferir {
     background-color: var(--cor-sucesso);
     color: var(--cor-branco);
 }
 
-/* Classe específica para botões de perigo (vermelho) */
 .btn-saque {
     background-color: var(--cor-perigo);
     color: var(--cor-branco);

@@ -1,88 +1,136 @@
 # seed.py
 
-# Importa as ferramentas necessárias do seu app
-# 'app' nos dá o contexto da aplicação, e 'db' a conexão com o banco.
 from app import create_app, db
-from models import Usuario, Cliente, Funcionario
+from models import Usuario, Cliente, Funcionario, Agencia, Conta, Endereco
 from werkzeug.security import generate_password_hash
 from datetime import date
 
-# Criamos uma instância do app para poder usar seu contexto
 app = create_app()
 
-# Função para criar e salvar os dados
 def seed_data():
-    # O 'with app.app_context()' é MUITO IMPORTANTE. Ele diz ao SQLAlchemy:
-    # "Execute as operações a seguir usando a configuração e conexão do banco de dados
-    # definidas no nosso app Flask". Sem isso, daria erro.
     with app.app_context():
-        # Limpa as tabelas para evitar duplicatas se rodarmos o script de novo
         print("Limpando dados antigos...")
+        # A ordem de limpeza é importante por causa das chaves estrangeiras
+        db.session.query(Conta).delete()
         db.session.query(Funcionario).delete()
         db.session.query(Cliente).delete()
+        db.session.query(Agencia).delete()
+        db.session.query(Endereco).delete()
         db.session.query(Usuario).delete()
         db.session.commit()
         
-        # --- 1. Criação do Usuário CLIENTE ---
-        print("Criando usuário cliente de teste...")
-        
-        # Primeiro, o registro na tabela 'usuario'
-        usuario_cliente = Usuario(
+        # --- 1. Criação de Endereço e Agência ---
+        print("Criando agência de teste...")
+        endereco_agencia = Endereco(
+            cep='01001-000',
+            local='Praça da Sé',
+            numero_casa=1,
+            bairro='Sé',
+            estado='SP',
+            complemento='Lado da Catedral'
+        )
+        db.session.add(endereco_agencia)
+        db.session.commit()
+
+        agencia_central = Agencia(
+            nome='Agência Central Imperial',
+            codigo_agencia='0001',
+            id_endereco=endereco_agencia.id_endereco
+        )
+        db.session.add(agencia_central)
+        db.session.commit()
+        print(" -> Agência '0001' criada.")
+
+        # --- 2. Criação do PRIMEIRO Usuário CLIENTE (Darth Vader) ---
+        print("\nCriando o primeiro usuário cliente...")
+        usuario_cliente_1 = Usuario(
             nome='Darth Vader',
             CPF='11111111111',
             data_nascimento=date(1977, 5, 25),
             telefone='(11) 91111-1111',
-            email='nathanaelmagno000@gmail.com',
+            email='nathanaelmagno000@gmail.com', # Mesmo e-mail
             tipo_usuario='Cliente',
-            # NUNCA salve senhas em texto! Usamos a função para gerar um hash seguro.
             senha_hash=generate_password_hash('senha123', method='pbkdf2:sha256')
         )
-        
-        # Adiciona o usuário à "área de preparação" do SQLAlchemy
-        db.session.add(usuario_cliente)
-        
-        # Salva o usuário no banco. Isso é necessário para que ele receba um 'id_usuario'.
+        db.session.add(usuario_cliente_1)
         db.session.commit()
 
-        # Agora que o usuário existe, criamos o registro 'cliente' correspondente
-        novo_cliente = Cliente(
-            id_usuario=usuario_cliente.id_usuario,
+        cliente_1 = Cliente(
+            id_usuario=usuario_cliente_1.id_usuario,
             score_credito=750.00
         )
-        db.session.add(novo_cliente)
-        print(" -> Usuário 'Darth Vader' (Cliente) criado.")
-
-        # --- 2. Criação do Usuário FUNCIONÁRIO ---
-        print("Criando usuário funcionário de teste...")
-
-        # O registro na tabela 'usuario'
-        usuario_funcionario = Usuario(
-            nome='Sheev Palpatine',
-            CPF='22222222222',
-            data_nascimento=date(1953, 1, 1),
-            telefone='(11) 92222-2222',
-            email='palpatine@imperio.com',
-            tipo_usuario='Funcionario',
-            senha_hash=generate_password_hash('ordem66', method='pbkdf2:sha256')
-        )
-        db.session.add(usuario_funcionario)
+        db.session.add(cliente_1)
         db.session.commit()
 
-        # O registro 'funcionario' correspondente
-        novo_funcionario = Funcionario(
-            id_usuario=usuario_funcionario.id_usuario,
-            codigo_funcionario='EMP001',
-            cargo='Gerente',
-            id_supervisor=None # O gerente principal não tem supervisor
+        conta_1 = Conta(
+            numero_conta='12345-6',
+            saldo=10000.00,
+            tipo_conta='Corrente',
+            status='Ativa',
+            id_agencia=agencia_central.id_agencia,
+            id_cliente=cliente_1.id_cliente
         )
-        db.session.add(novo_funcionario)
-        print(" -> Usuário 'Sheev Palpatine' (Funcionário) criado.")
+        db.session.add(conta_1)
+        print(" -> Usuário 'Darth Vader' e conta '12345-6' criados.")
 
-        # Finalmente, salva todas as adições (cliente e funcionario) no banco
+        # --- 3. Criação do SEGUNDO Usuário CLIENTE (Luke Skywalker) ---
+        print("\nCriando o segundo usuário cliente...")
+        usuario_cliente_2 = Usuario(
+            nome='Luke Skywalker',
+            CPF='33333333333', # CPF diferente
+            data_nascimento=date(1977, 5, 25),
+            telefone='(11) 93333-3333',
+            email='nathanaelvictor000@gmail.com', # Mesmo e-mail, como solicitado
+            tipo_usuario='Cliente',
+            senha_hash=generate_password_hash('senha456', method='pbkdf2:sha256') # Senha diferente
+        )
+        db.session.add(usuario_cliente_2)
+        db.session.commit()
+
+        cliente_2 = Cliente(
+            id_usuario=usuario_cliente_2.id_usuario,
+            score_credito=850.00
+        )
+        db.session.add(cliente_2)
+        db.session.commit()
+
+        conta_2 = Conta(
+            numero_conta='78910-1', # Número de conta diferente
+            saldo=5000.00,
+            tipo_conta='Poupanca',
+            status='Ativa',
+            id_agencia=agencia_central.id_agencia,
+            id_cliente=cliente_2.id_cliente
+        )
+        db.session.add(conta_2)
+        print(" -> Usuário 'Luke Skywalker' e conta '78910-1' criados.")
+
+        # --- 4. Criação do Usuário FUNCIONÁRIO (Comentado) ---
+        # print("\nCriando usuário funcionário de teste...")
+        # usuario_funcionario = Usuario(
+        #     nome='Sheev Palpatine',
+        #     CPF='22222222222',
+        #     data_nascimento=date(1953, 1, 1),
+        #     telefone='(11) 92222-2222',
+        #     email='palpatine@imperio.com',
+        #     tipo_usuario='Funcionario',
+        #     senha_hash=generate_password_hash('ordem66', method='pbkdf2:sha256')
+        # )
+        # db.session.add(usuario_funcionario)
+        # db.session.commit()
+        #
+        # novo_funcionario = Funcionario(
+        #     id_usuario=usuario_funcionario.id_usuario,
+        #     codigo_funcionario='EMP001',
+        #     cargo='Gerente',
+        #     id_supervisor=None
+        # )
+        # db.session.add(novo_funcionario)
+        # print(" -> Usuário 'Sheev Palpatine' (Funcionário) criado.")
+
+        # Finalmente, salva todas as adições no banco
         db.session.commit()
         print("\nBanco de dados populado com sucesso!")
 
-
-# Esta linha permite que a gente execute o script diretamente pelo terminal com 'python seed.py'
 if __name__ == '__main__':
     seed_data()

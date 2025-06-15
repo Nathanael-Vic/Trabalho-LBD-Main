@@ -1,6 +1,3 @@
-/* static/css/style.css */
-
-/* GERAL E VARIÁVEIS */
 :root {
   --cor-primaria: #202020;
   --cor-secundaria: #4e5255;
@@ -25,7 +22,6 @@ a {
   color: inherit;
 }
 
-/* HEADER (agora um componente) */
 header {
   display: flex;
   justify-content: space-between;
@@ -35,7 +31,6 @@ header {
   border-bottom: 1px solid #ddd;
   box-shadow: var(--sombra-padrao);
   height: 85px;
-  /* Altura fixa para o cálculo do main */
   box-sizing: border-box;
 }
 
@@ -52,7 +47,6 @@ header {
   margin-right: 10px;
 }
 
-/* LAYOUT PRINCIPAL DOS DASHBOARDS */
 .container-home {
   display: flex;
   height: calc(100vh - 85px);
@@ -109,7 +103,6 @@ header {
   font-size: 16px;
 }
 
-/* COMPONENTES REUTILIZÁVEIS (CARDS, BOTÕES) */
 .card {
   background-color: var(--cor-branco);
   padding: 25px;
@@ -146,24 +139,15 @@ header {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* DENTRO DE static/css/style.css */
-
-/* * =================================
- * BOTÕES (ESTILO BASE GLOBAL)
- * =================================
- */
 .btn {
   display: inline-block;
   padding: 15px 30px;
-  /* Define o tamanho do botão */
   font-size: 16px;
-  /* Define o tamanho do texto */
   font-weight: bold;
   text-align: center;
   text-decoration: none;
   border: none;
   border-radius: 8px;
-  /* Bordas arredondadas */
   cursor: pointer;
   transition: all 0.3s ease;
 }

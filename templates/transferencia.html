@@ -21,6 +21,13 @@
         {% include 'components/menu_lateral_cliente.html' %}
 
         <section class="conteudo-principal">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
             <h1>Realizar Transferência</h1>
             <p>Envie dinheiro para outra conta do Banco Malvader de forma rápida e segura.</p>
 

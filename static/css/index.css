@@ -1,12 +1,6 @@
-/* static/css/index.css */
-
-/* * =================================
- * LAYOUT DA PÁGINA DE LOGIN
- * =================================
- */
 .horizontal-container {
   display: flex;
-  height: calc(100vh - 85px); /* Ajuste para a altura do header */
+  height: calc(100vh - 85px);
 }
 
 .left-side,
@@ -20,7 +14,6 @@
   transition: width 0.5s ease;
 }
 
-/* Lado Esquerdo (com imagem de fundo) */
 .left-side {
   flex-direction: column;
   text-align: center;
@@ -43,16 +36,11 @@
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* Lado Direito (área de acesso) */
 .right-side {
   background-color: var(--cor-fundo-claro);
   flex-direction: column;
 }
 
-/* * =================================
- * CAIXA DE ESCOLHA DE ACESSO
- * =================================
- */
 .access-box {
   text-align: center;
   width: 100%;
@@ -65,19 +53,15 @@
 }
 
 .btn.blue {
-  background-color: var(--cor-primaria); /* #202020 */
+  background-color: var(--cor-primaria);
   color: var(--cor-branco);
 }
 
 .btn.gray {
-  background-color: var(--cor-secundaria); /* #4e5255 */
+  background-color: var(--cor-secundaria);
   color: var(--cor-branco);
 }
 
-/* * =================================
- * FORMULÁRIO DE LOGIN
- * =================================
- */
 .login-form {
   background-color: var(--cor-branco);
   padding: 40px;
@@ -140,16 +124,16 @@
 }
 
 #botao-voltar {
-  position: absolute;   /* Posiciona o botão em relação ao .login-form */
-  top: 20px;            /* Distância do topo */
-  left: 20px;           /* Distância da esquerda */
+  position: absolute;   
+  top: 20px;            
+  left: 20px;           
   
-  width: 40px;          /* Largura do círculo */
-  height: 40px;         /* Altura do círculo */
+  width: 40px;        
+  height: 40px;       
   background-color: #f0f0f0;
-  border-radius: 50%;   /* Deixa o botão redondo */
+  border-radius: 50%;  
   
-  display: flex;        /* Usamos flex para centralizar o ícone da seta */
+  display: flex;        
   align-items: center;
   justify-content: center;
   
@@ -161,7 +145,6 @@
   background-color: #e0e0e0;
 }
 
-/* Ajusta a cor da seta (ícone SVG) */
 #botao-voltar svg {
-  fill: var(--cor-primaria); /* Usa a cor preta principal do seu tema */
+  fill: var(--cor-primaria);
 }

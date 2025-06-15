@@ -1,4 +1,3 @@
-# auth_services.py
 # Este módulo cuida exclusivamente da interação com a API do Google.
 
 import os
@@ -12,7 +11,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-# Escopo de permissão: Apenas para enviar e-mails.
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def enviar_email_otp(destinatario, nome_usuario, otp):
@@ -30,10 +28,9 @@ def enviar_email_otp(destinatario, nome_usuario, otp):
                 creds.refresh(Request())
             except Exception as e:
                 print(f"Erro ao atualizar token, forçando novo login: {e}")
-                # Se o refresh falhar, deleta o token para forçar um novo login
                 if os.path.exists('token.json'):
                     os.remove('token.json')
-                creds = None # Garante que o fluxo de novo login seja iniciado
+                creds = None
         
         if not creds:
             try:

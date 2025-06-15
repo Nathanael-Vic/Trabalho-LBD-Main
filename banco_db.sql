@@ -1,21 +1,19 @@
 CREATE DATABASE IF NOT EXISTS banco_db;
 USE banco_db;
 
--- CORREÇÃO: Adicionada vírgula, corrigido typo e aumentada a segurança da senha
 CREATE TABLE usuario (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
-    CPF VARCHAR(14) UNIQUE NOT NULL, -- Ajustado para tamanho padrão de CPF
+    CPF VARCHAR(14) UNIQUE NOT NULL,
     data_nascimento DATE NOT NULL,
     telefone VARCHAR(15) NOT NULL,
     email VARCHAR(120) UNIQUE NOT NULL,
     tipo_usuario ENUM('Funcionario', 'Cliente') NOT NULL,
-    senha_hash VARCHAR(255) NOT NULL, -- CORREÇÃO: Aumentado para suportar hashes seguros (ex: bcrypt)
+    senha_hash VARCHAR(255) NOT NULL,
     otp_ativo VARCHAR(6),
-    otp_expiracao DATETIME -- CORREÇÃO: Typo corrigido de 'oto_' para 'otp_'
+    otp_expiracao DATETIME
 );
 
--- CORREÇÃO: Lógica e nome da FK do supervisor, nome da FK do usuário
 CREATE TABLE funcionario (
     id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
     codigo_funcionario VARCHAR(20) UNIQUE NOT NULL,

@@ -1,6 +1,6 @@
 from app import create_app, db
 from app.models import (Usuario, Cliente, Agencia, Conta, Endereco, 
-                    ContaCorrente, ContaPoupanca, ContaInvestimento) # Adicionar ContaInvestimento
+                    ContaCorrente, ContaPoupanca, ContaInvestimento)
 from werkzeug.security import generate_password_hash
 from datetime import date
 from decimal import Decimal

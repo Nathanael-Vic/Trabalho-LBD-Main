@@ -1,7 +1,7 @@
 # seed.py
 
 from app import create_app, db
-from models import (Usuario, Cliente, Agencia, Conta, Endereco, 
+from app.models import (Usuario, Cliente, Agencia, Conta, Endereco, 
                     ContaCorrente, ContaPoupanca, ContaInvestimento) # Adicionar ContaInvestimento
 from werkzeug.security import generate_password_hash
 from datetime import date

@@ -1,12 +1,9 @@
-# app/auth/routes.py
-
 import os
 import random
 from datetime import datetime, timedelta, timezone
 from flask import (Blueprint, render_template, request, redirect, url_for, flash, session)
 from werkzeug.security import check_password_hash
 
-# Importações corrigidas para a nova estrutura
 from app.models import db, Usuario, Auditoria
 from app.auth_services import enviar_email_otp
 
@@ -34,7 +31,6 @@ def login():
         flash('CPF, senha ou tipo de usuário inválidos.', 'danger')
         return redirect(url_for('auth.index'))
 
-    # Lógica de bloqueio
     ultimo_sucesso = Auditoria.query.filter_by(id_usuario=usuario.id_usuario, acao='Login', detalhes='Sucesso').order_by(Auditoria.data_hora.desc()).first()
     query_falhas = Auditoria.query.filter(Auditoria.id_usuario == usuario.id_usuario, Auditoria.acao == 'Login', Auditoria.detalhes.like('Falha%'))
     if ultimo_sucesso:

@@ -1,4 +1,3 @@
-# models.py
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import ENUM
 from datetime import datetime, timezone
@@ -18,15 +17,9 @@ class Usuario(db.Model):
     otp_ativo = db.Column(db.String(6))
     otp_expiracao = db.Column(db.DateTime)
 
-    # Colunas de tentativa de login e bloqueio foram REMOVIDAS,
-    # pois essa lógica será tratada pela tabela Auditoria.
-
-    # Relacionamentos
     cliente = db.relationship('Cliente', back_populates='usuario', uselist=False, cascade="all, delete-orphan")
     funcionario = db.relationship('Funcionario', back_populates='usuario', uselist=False, cascade="all, delete-orphan")
     auditorias = db.relationship('Auditoria', back_populates='usuario')
-
-# --- O resto dos seus modelos permanece o mesmo ---
 
 class Funcionario(db.Model):
     __tablename__ = 'funcionario'

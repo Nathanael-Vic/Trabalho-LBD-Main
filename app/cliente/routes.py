@@ -1,29 +1,21 @@
-# app/cliente/routes.py
-
 from functools import wraps
 from decimal import Decimal
 import io
-# Removido: import csv
 from datetime import datetime, timedelta, timezone
-# Removido: make_response, send_file (send_file é importado implicitamente com o Blueprint)
 from flask import (Blueprint, render_template, request, redirect,
                    url_for, flash, session, send_file)
 from sqlalchemy import or_, func
 import pandas as pd
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 
-# Importações corrigidas
 from app.models import db, Cliente, Conta, Transacao, ContaCorrente, ContaPoupanca, ContaInvestimento
 
-# Cria o Blueprint do cliente
 cliente_bp = Blueprint('cliente', __name__)
 
-# Constantes de regras de negócio
 LIMITE_DIARIO_DEPOSITO = Decimal('10000.00')
 TAXA_SAQUE_EXCESSIVO = Decimal('5.00')
 LIMITE_SAQUES_GRATUITOS = 5
 
-# Decorador de autenticação
 def login_required(role=None):
     def decorator(f):
         @wraps(f)
@@ -75,11 +67,8 @@ def deposito():
             if isinstance(conta, ContaInvestimento) and valor < conta.valor_minimo_deposito:
                 raise ValueError(f"O depósito mínimo é de R$ {conta.valor_minimo_deposito:.2f}.")
             
-            # --- CORREÇÃO DA LÓGICA DO LIMITE DIÁRIO ---
-            # Define o início da janela de verificação como 24 horas atrás a partir de agora.
             inicio_janela_24h = datetime.now(timezone.utc) - timedelta(hours=24)
             
-            # Soma todos os depósitos feitos DENTRO dessa janela de 24 horas.
             depositos_recentes = db.session.query(func.sum(Transacao.valor)).filter(
                 Transacao.id_conta_destino == conta.id_conta,
                 Transacao.tipo_transacao == 'Deposito',
@@ -229,7 +218,6 @@ def imprimir_extrato():
 @cliente_bp.route('/extrato/excel')
 @login_required(role='Cliente')
 def exportar_excel():
-    # Lógica de busca de dados (idêntica às outras rotas)
     cliente = Cliente.query.filter_by(id_usuario=session['user_id']).first_or_404()
     conta = cliente.contas[0]
     data_inicio_str = request.args.get('data_inicio')
@@ -239,7 +227,6 @@ def exportar_excel():
     if data_fim_str: query = query.filter(Transacao.data_hora <= datetime.strptime(data_fim_str, '%Y-%m-%d') + timedelta(days=1, seconds=-1))
     transacoes_db = query.order_by(Transacao.data_hora.desc()).all()
 
-    # Preparação dos dados para o DataFrame
     dados = []
     for t in transacoes_db:
         valor = t.valor if t.id_conta_destino == conta.id_conta else -t.valor
@@ -252,39 +239,32 @@ def exportar_excel():
         })
     df = pd.DataFrame(dados)
 
-    # Criação do arquivo Excel em memória
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='Extrato')
         
-        # Acessa a planilha para aplicar estilos
         workbook = writer.book
         worksheet = writer.sheets['Extrato']
 
-        # Define estilos
         header_font = Font(bold=True, color="FFFFFF")
         header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")
         cell_alignment = Alignment(horizontal="left", vertical="center")
         
-        # Aplica estilos ao cabeçalho
         for cell in worksheet["1:1"]:
             cell.font = header_font
             cell.fill = header_fill
             cell.alignment = cell_alignment
 
-        # Ajusta a largura das colunas
-        worksheet.column_dimensions['A'].width = 20  # Data
-        worksheet.column_dimensions['B'].width = 15  # Tipo
-        worksheet.column_dimensions['C'].width = 50  # Descrição
-        worksheet.column_dimensions['D'].width = 15  # Valor
+        worksheet.column_dimensions['A'].width = 20  
+        worksheet.column_dimensions['B'].width = 15  
+        worksheet.column_dimensions['C'].width = 50
+        worksheet.column_dimensions['D'].width = 15
 
-        # Formata a coluna de valor como moeda
         for cell in worksheet['D'][1:]:
             cell.number_format = 'R$ #,##0.00'
 
     output.seek(0)
     
-    # Envia o arquivo para o usuário
     return send_file(
         output,
         download_name='extrato.xlsx',

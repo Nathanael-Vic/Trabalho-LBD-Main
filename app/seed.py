@@ -1,5 +1,3 @@
-# seed.py
-
 from app import create_app, db
 from app.models import (Usuario, Cliente, Agencia, Conta, Endereco, 
                     ContaCorrente, ContaPoupanca, ContaInvestimento) # Adicionar ContaInvestimento
@@ -22,7 +20,6 @@ def seed_data():
         db.session.query(Usuario).delete()
         db.session.commit()
         
-        # ... (Criação da agência continua igual) ...
         print("Criando agência de teste...")
         endereco_agencia = Endereco(cep='01001-000', local='Praça da Sé', numero_casa=1, bairro='Sé', estado='SP')
         db.session.add(endereco_agencia)
@@ -31,9 +28,7 @@ def seed_data():
         db.session.add(agencia_central)
         db.session.commit()
 
-        # --- USUÁRIO 1: CONTA CORRENTE (Nathanael) ---
         print("\nCriando cliente com Conta Corrente...")
-        # ... (código do usuário 1 continua igual) ...
         usuario_1 = Usuario(nome='Nathanael (Vader)', CPF='111111', data_nascimento=date(1990, 1, 1), telefone='(11) 91111-1111', email='nathanaelmagno000@gmail.com', tipo_usuario='Cliente', senha_hash=generate_password_hash('senha123'))
         db.session.add(usuario_1)
         db.session.commit()
@@ -43,9 +38,7 @@ def seed_data():
         conta_1 = ContaCorrente(numero_conta='12345-6', saldo=10000.00, status='Ativa', id_agencia=agencia_central.id_agencia, id_cliente=cliente_1.id_cliente, limite_cheque_especial=Decimal('500.00'), taxa_manutencao=Decimal('15.00'))
         db.session.add(conta_1)
 
-        # --- USUÁRIO 2: CONTA POUPANÇA (Isabela) ---
         print("\nCriando cliente com Conta Poupança...")
-        # ... (código do usuário 2 continua igual) ...
         usuario_2 = Usuario(nome='Isabela (Leia)', CPF='222222', data_nascimento=date(1992, 2, 2), telefone='(11) 94444-4444', email='Isabelamb046@gmail.com', tipo_usuario='Cliente', senha_hash=generate_password_hash('senha456'))
         db.session.add(usuario_2)
         db.session.commit()
@@ -55,7 +48,6 @@ def seed_data():
         conta_2 = ContaPoupanca(numero_conta='11223-3', saldo=7500.00, status='Ativa', id_agencia=agencia_central.id_agencia, id_cliente=cliente_2.id_cliente, taxa_rendimento=Decimal('0.05'))
         db.session.add(conta_2)
 
-        # --- USUÁRIO 3: CONTA INVESTIMENTO (Han Solo) ---
         print("\nCriando cliente com Conta de Investimento...")
         usuario_3 = Usuario(nome='Han Solo', CPF='55555555555', data_nascimento=date(1980, 7, 13), telefone='(11) 95555-5555', email='nathanaelvictor000@gmail.com', tipo_usuario='Cliente', senha_hash=generate_password_hash('senha789'))
         db.session.add(usuario_3)

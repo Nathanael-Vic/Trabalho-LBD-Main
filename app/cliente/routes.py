@@ -270,4 +270,3 @@ def exportar_excel():
         as_attachment=True,
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-

@@ -1,5 +1,3 @@
-# Este módulo cuida exclusivamente da interação com a API do Google.
-
 import os
 import base64
 from email.mime.text import MIMEText

@@ -8,7 +8,7 @@ class Config:
     # URI de conexão com o MySQL (altere 'seu_usuario', 'sua_senha' e 'banco_db' para os seus valores)
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "mysql+pymysql://root:18887@localhost/banco_db"
+        "mysql+pymysql://seu_usuario:sua_senha@localhost/banco_db"
     )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False

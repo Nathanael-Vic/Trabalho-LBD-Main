@@ -1,5 +1,4 @@
 from app import create_app, db
-# Importa todos os modelos necessários
 from app.models import (Usuario, Cliente, Funcionario, Agencia, Conta, Endereco, 
                         ContaCorrente, ContaPoupanca, ContaInvestimento, HistoricoConta)
 from werkzeug.security import generate_password_hash
@@ -11,7 +10,6 @@ app = create_app()
 def seed_data():
     with app.app_context():
         print("Limpando dados antigos...")
-        # A ordem de limpeza é importante por causa das chaves estrangeiras
         db.session.query(HistoricoConta).delete()
         db.session.query(ContaInvestimento).delete()
         db.session.query(ContaCorrente).delete()
@@ -38,10 +36,10 @@ def seed_data():
         print("\nCriando usuário Cliente de teste...")
         usuario_cliente = Usuario(
             nome='Nathanael Cliente', 
-            CPF='111111', # CPF ajustado
+            CPF='11111111111',
             data_nascimento=date(1990, 1, 1), 
             telefone='(11) 91111-1111', 
-            email='nathanaelvictor000@gmail.com', # E-mail ajustado
+            email='nathanaelvictor000@gmail.com',
             tipo_usuario='Cliente', 
             senha_hash=generate_password_hash('cliente123')
         )
@@ -63,14 +61,13 @@ def seed_data():
         db.session.add(conta_poupanca)
         print(" -> Usuário 'Nathanael Cliente' e Conta Poupança '11223-3' criados.")
 
-        # --- USUÁRIO 2: FUNCIONÁRIO (GERENTE) ---
         print("\nCriando usuário Funcionário (Gerente)...")
         usuario_funcionario = Usuario(
             nome='Nathanael Funcionário', 
-            CPF='222222', # CPF ajustado
+            CPF='22222222222',
             data_nascimento=date(1992, 2, 2), 
             telefone='(11) 92222-2222', 
-            email='nathanaelmagno000@gmail.com', # E-mail ajustado
+            email='nathanaelmagno000@gmail.com', 
             tipo_usuario='Funcionario', 
             senha_hash=generate_password_hash('func123')
         )

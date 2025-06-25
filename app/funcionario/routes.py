@@ -16,10 +16,8 @@ from app.models import (db, Usuario, Cliente, Funcionario, Conta, Agencia, Audit
 from sqlalchemy import func
 from app.auth_services import enviar_email_otp
 
-# Cria o Blueprint do funcionário
 funcionario_bp = Blueprint('funcionario', __name__, template_folder='templates')
 
-# --- DECORADOR DE AUTENTICAÇÃO E CONTEXTO ---
 def login_required(role=None):
     def decorator(f):
         @wraps(f)
@@ -36,7 +34,6 @@ def login_required(role=None):
             
             session['cargo'] = funcionario.cargo
 
-            # Se um cargo (role) específico é requerido, verifica a permissão
             if role and funcionario.cargo != role:
                 flash('Você não tem permissão para esta ação.', 'danger')
                 return redirect(url_for('funcionario.dashboard'))
@@ -54,7 +51,6 @@ def inject_user_info():
             return dict(nome_usuario=funcionario.usuario.nome, cargo=funcionario.cargo)
     return dict(nome_usuario=None, cargo=None)
 
-# --- FUNÇÕES HELPER ---
 def luhn_checksum(card_number):
     def digits_of(n): return [int(d) for d in str(n)]
     digits = digits_of(card_number)
@@ -74,8 +70,6 @@ def generate_account_number():
 def generate_employee_code():
     last_id = db.session.query(func.max(Funcionario.id_funcionario)).scalar() or 0
     return f"FUNC{last_id + 1:03d}"
-
-# --- ROTAS DO FUNCIONÁRIO ---
 
 @funcionario_bp.route('/dashboard')
 @login_required()
@@ -134,13 +128,11 @@ def abertura_conta():
     max_dob = date.today().replace(year=date.today().year - 16)
     return render_template('funcionario/abertura_conta.html', max_dob=max_dob)
 
-# --- ROTA DE CADASTRO DE FUNCIONÁRIO ADICIONADA ---
 @funcionario_bp.route('/cadastro-funcionario', methods=['GET', 'POST'])
-@login_required(role='Gerente') # Apenas Gerentes
+@login_required(role='Gerente')
 def cadastro_funcionario():
     if request.method == 'POST':
         try:
-            # Validações e lógica de criação de funcionário
             cpf_limpo = re.sub(r'\D', '', request.form.get('cpf'))
             if len(cpf_limpo) != 11 or not cpf_limpo.isdigit(): raise ValueError("CPF inválido.")
             if Usuario.query.filter_by(CPF=cpf_limpo).first(): raise ValueError("Este CPF já está cadastrado.")
@@ -172,7 +164,6 @@ def cadastro_funcionario():
 
     max_dob = date.today().replace(year=date.today().year - 16)
     return render_template('funcionario/cadastro_funcionario.html', max_dob=max_dob)
-# ----------------------------------------------------
 
 @funcionario_bp.route('/encerramento-conta', methods=['GET', 'POST'])
 @login_required()

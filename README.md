@@ -57,6 +57,9 @@ Estrutura relacional com:
 ## 🚀 Configuração e Execução
 - Siga os passos abaixo para rodar o projeto. É necessário ter o Python e o MySQL instalados na máquina.
 
+> ⚠️ **Atenção: Configuração da API do Google**
+> Para que a funcionalidade de envio de e-mails com OTP (One-Time Password) funcione, é **obrigatório** configurar as credenciais da API do Gmail no seu Google Cloud Platform e autorizar o uso para este projeto. O envio de e-mails não funcionará sem essa autorização prévia.
+
 ### Passo 1: Instalação das Dependências
 Abra o terminal na pasta raiz do projeto e instale todas as bibliotecas listadas no arquivo `requirements.txt` com o seguinte comando:
 ```bash
@@ -84,8 +87,14 @@ SQLALCHEMY_DATABASE_URI = os.getenv(
 )
 ```
 
+#### Crie os Scripts de Migração:
+Volte para o terminal (na pasta do projeto) e rode o comando abaixo. Ele irá detectar os modelos de tabelas no seu código e gerar os scripts para criar a estrutura do banco de dados.
+```bash
+flask db migrate -m "Criação inicial das tabelas"
+```
+
 #### Crie as Tabelas:
-Volte para o terminal (na pasta do projeto) e rode o comando abaixo. Ele usará a conexão que você configurou para criar todas as tabelas da aplicação automaticamente.
+Agora, execute o comando a seguir para aplicar os scripts gerados no passo anterior e criar de fato todas as tabelas no seu banco de dados.
 ```bash
 flask db upgrade
 ```

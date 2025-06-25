@@ -90,7 +90,7 @@ SQLALCHEMY_DATABASE_URI = os.getenv(
 #### Crie os Scripts de Migração:
 Volte para o terminal (na pasta do projeto) e rode o comando abaixo. Ele irá detectar os modelos de tabelas no seu código e gerar os scripts para criar a estrutura do banco de dados.
 ```bash
-flask db migrate -m "Criação inicial das tabelas"
+flask db migrate
 ```
 
 #### Crie as Tabelas:
